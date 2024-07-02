@@ -9,7 +9,7 @@
     </option>
   </component>
   <component name="ProjectResources">
-    <default-html-doctype>jar:file:\C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\lib\app.jar!\standardSchemas\xhtml1-transitional.xsd</default-html-doctype>
+    <default-html-doctype>https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd</default-html-doctype>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
