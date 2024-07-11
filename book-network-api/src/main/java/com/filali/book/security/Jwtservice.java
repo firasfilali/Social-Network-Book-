@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class Jwtservice {
+public class Jwtservice { // this class is responsible for handling JWT operation such as creating, parsing validating JWT tokens
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
     @Value("${application.security.jwt.expiration}")
