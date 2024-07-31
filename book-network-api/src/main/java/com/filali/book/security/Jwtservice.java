@@ -45,7 +45,7 @@ public class Jwtservice { // this class is responsible for handling JWT operatio
                 .getBody();
     }
 
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
 
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }

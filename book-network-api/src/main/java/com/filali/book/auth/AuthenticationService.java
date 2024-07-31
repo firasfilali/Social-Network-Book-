@@ -3,6 +3,7 @@ package com.filali.book.auth;
 import com.filali.book.email.EmailService;
 import com.filali.book.email.EmailTemplateName;
 import com.filali.book.role.RoleRepository;
+import com.filali.book.security.Jwtservice;
 import com.filali.book.user.Token;
 import com.filali.book.user.TokenRepository;
 import com.filali.book.user.User;
@@ -10,11 +11,14 @@ import com.filali.book.user.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -25,7 +29,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
+    private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final Jwtservice jwtservice;
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
@@ -53,7 +59,7 @@ public class AuthenticationService {
         emailService.sendEmail(
                 user.getEmail(),
                 user.getFullName(),
-                EmailTemplateName.ACTIVATION_ACCOUNT,
+                EmailTemplateName.ACTIVATE_ACCOUNT,
                 activationUrl,
                 newToken,
                 "Account activation"
@@ -87,5 +93,23 @@ public class AuthenticationService {
         }
 
         return codeBuilder.toString();
+    }
+
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        var auth = authenticationManager.authenticate( //create an authentication using the authenticationManager bean
+                new UsernamePasswordAuthenticationToken( // represent an authentication attempt
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+        var claims = new HashMap<String, Object>(); // store claims for the jwt
+        var user = ((User) auth.getPrincipal());
+        claims.put("fullName", user.getFullName()); // add the user full name to the claims
+
+        var jwtToken = jwtservice.generateToken(claims, (User) auth.getPrincipal());
+        return AuthenticationResponse.builder()
+                .token(jwtToken) // Sets the generated JWT token as the response's token.
+                .build();
+
     }
 }
