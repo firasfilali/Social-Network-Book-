@@ -19,10 +19,13 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<Integer> saveBook(
-            @Valid @RequestBody BookRequest request,
+            // @RequestBody: Indicates that the request body should be mapped to a BookRequest object.
+            // BookRequest: This class likely defines the expected format of the request data for creating a new book.
+            @Valid @RequestBody  BookRequest request,
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(service.save(request, connectedUser));
+        //request: The validated BookRequest object containing new book information.
     }
 
     @GetMapping("/{book-id}")
@@ -33,9 +36,10 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<BookResponse>> findAllBooks(
+    public ResponseEntity<PageResponse<BookResponse>> findAllBooks( //Returns a ResponseEntity object containing a PageResponse object, which encapsulates paginated book data.
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+            //@RequestParam: Specifies optional request parameters for page and size with default values.
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(service.findAllBooks(page, size, connectedUser));
@@ -59,4 +63,46 @@ public class BookController {
     ) {
         return ResponseEntity.ok(service.findAllBorrowedBooks(page, size, connectedUser));
     }
+
+    @GetMapping("/returned")
+    public ResponseEntity<PageResponse<BorrowedBookResponse>> findAllReturnedBooks(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.findAllReturnedBooks(page, size, connectedUser));
+    }
+
+    @PatchMapping("/shareable/{book-id}")
+    public ResponseEntity<Integer> updateShareableStatus(
+            @PathVariable("book-id") Integer bookId, // Extracts the book's ID from the URL path.
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.updateShareableStatus(bookId, connectedUser));
+    }
+
+    @PatchMapping("/archived/{book-id}")
+    public ResponseEntity<Integer> updateArchivedStatus(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.updateArchivedStatus(bookId, connectedUser));
+    }
+
+    @PostMapping("borrow/{book-id}")
+    public ResponseEntity<Integer> borrowBook(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.borrowBook(bookId, connectedUser));
+    }
+
+    @PatchMapping("borrow/return/{book-id}")
+    public ResponseEntity<Integer> returnBorrowBook(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.returnBorrowedBook(bookId, connectedUser));
+    }
+
 }
