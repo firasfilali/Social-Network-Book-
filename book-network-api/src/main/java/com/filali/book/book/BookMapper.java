@@ -1,5 +1,6 @@
 package com.filali.book.book;
 
+import com.filali.book.file.FileUtils;
 import com.filali.book.history.BookTransactionHistory;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class BookMapper { // This class is likely responsible for converting dat
                 .archived(book.isArchived())
                 .shareable(book.isShareable())
                 .owner(book.getOwner().getFullName())
-                //.cover(FileUtils.readFileFromLocation(book.getBookCover()))
+                .cover(FileUtils.readFileFromLocation(book.getBookCover()))
                 .build();
     }
 
