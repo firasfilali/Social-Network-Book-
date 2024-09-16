@@ -1,0 +1,24 @@
+spring:
+  security:
+    user:
+      name: user
+      password: user
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 50MB
+springdoc:
+  default-produces-media-type: application/json
+server:
+  port: 8089
+  servlet:
+    context-path: /api/v1/
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        boot:
+          autoconfigure:
+            security: INFO
