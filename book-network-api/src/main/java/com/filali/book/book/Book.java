@@ -1,7 +1,7 @@
 package com.filali.book.book;
 
 import com.filali.book.common.BaseEntity;
-import com.filali.book.feedback.FeedBack;
+import com.filali.book.feedback.Feedback;
 import com.filali.book.history.BookTransactionHistory;
 import com.filali.book.user.User;
 import jakarta.persistence.*;
@@ -33,7 +33,7 @@ public class Book extends BaseEntity {
     private User owner;
 
     @OneToMany(mappedBy = "book")
-    private List<FeedBack> feedBacks;
+    private List<Feedback> feedBacks;
 
     @OneToMany(mappedBy = "book")
     private List<BookTransactionHistory> histories;
@@ -44,7 +44,7 @@ public class Book extends BaseEntity {
             return 0.0;
         }
         var rate = this.feedBacks.stream()
-                .mapToDouble(FeedBack::getNote)
+                .mapToDouble(Feedback::getNote)
                 .average()
                 .orElse(0.0);
         double roundedRate = Math.round(rate * 10.0) / 10.0;
