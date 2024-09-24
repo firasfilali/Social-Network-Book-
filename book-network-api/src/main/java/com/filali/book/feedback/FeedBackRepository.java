@@ -7,10 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface FeedBackRepository extends JpaRepository<Feedback, Integer> {
-//    @Query("""
-//            SELECT feedback
-//            FROM Feedback feedback
-//            WHERE feedback.book.id = :bookId
-//            """)
+    @Query(nativeQuery = true,
+            value = "SELECT feedback FROM Feedback feedback WHERE feedback.book_id = :bookId"
+    )
     Page<Feedback> findAllByBookId(@Param("bookId") Integer bookId, Pageable pageable);
 }
