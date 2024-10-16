@@ -1,43 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AuthenticationRequest from "../api/src/model/AuthenticationRequest";
 import AuthenticationApi from "../api/src/api/AuthenticationApi";
+import ApiClient from "../api/src/ApiClient";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
+  const [error, setError] = useState(null);
   const [errorMsg, setErrorMsg] = useState([]);
+  const [success, setSuccess] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const authApi = new AuthenticationApi();
+  const apiClient = new ApiClient();
+
+  const authApi = new AuthenticationApi(apiClient);
+
+  //   useEffect(() => {
+  //     const token = localStorage.getItem('token');
+  //     if (token) {
+  //         setIsLoggedIn(true);
+  //     }
+  // }, []);
 
   const login = async () => {
-    setErrorMsg([]); 
-
-    const authRequest = new AuthenticationRequest({
-      email: email,
-      password: password
-    });
-
-    try {
-      // Call the login method from the generated OpenAPI client
-      const response = await authApi.authenticate(authRequest);
-
-      if (response.success) {
-        console.log("Login successful", response.data);
-        // Handle successful login, redirect, etc.
+    setError();
+    authApi.authenticate({ email, password }, (error, data) => {
+      if (error) {
+        console.error("Error during login:", error); // Log the error
+        setError("Login failed: " + error);
+        setSuccess(null);
       } else {
-        setErrorMsg([response.data.message || "Invalid credentials"]);
+        console.log("Login successful:", data); // Log the data received
+        const token = data.token; // Ensure this matches the expected structure
+        localStorage.setItem("token", token);
+
+        setSuccess("Login successful");
+        setError(null);
+        setIsLoggedIn(true);
       }
-    } catch (error) {
-      console.log(error);
-      // Handle errors (e.g., wrong credentials, network issues)
-      setErrorMsg([error.response?.data?.message || "Login failed"]);
-    }
+    });
   };
 
   const register = () => {
-    navigate('/register');
+    navigate("/register");
   };
 
   const handleEmailChange = (event) => {
@@ -64,16 +72,14 @@ function Login() {
           <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in to your account
           </h2>
-          {errorMsg.length > 0 && (
+          {error && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
               role="alert"
             >
               <strong className="font-bold">Error!</strong>
               <ul className="list-disc">
-                {errorMsg.map((errorMessage, index) => (
-                  <li key={index}>{errorMessage}</li>
-                ))}
+                <li>{error}</li>
               </ul>
             </div>
           )}
