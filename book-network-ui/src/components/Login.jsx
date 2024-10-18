@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import AuthenticationRequest from "../api/src/model/AuthenticationRequest";
 import AuthenticationApi from "../api/src/api/AuthenticationApi";
 import ApiClient from "../api/src/ApiClient";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +7,7 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
   const [error, setError] = useState(null);
-  const [errorMsg, setErrorMsg] = useState([]);
   const [success, setSuccess] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
