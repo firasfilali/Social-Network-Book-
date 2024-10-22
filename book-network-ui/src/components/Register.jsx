@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AuthenticationApi from "../api/src/api/AuthenticationApi";
-import ApiClient from "../api/src/ApiClient";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
