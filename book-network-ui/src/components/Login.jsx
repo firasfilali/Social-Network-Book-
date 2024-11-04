@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AuthenticationApi from "../api/src/api/AuthenticationApi";
 import ApiClient from "../api/src/ApiClient";
 import { useNavigate } from "react-router-dom";
@@ -15,13 +15,6 @@ function Login() {
 
   const authApi = new AuthenticationApi(apiClient);
 
-  //   useEffect(() => {
-  //     const token = localStorage.getItem('token');
-  //     if (token) {
-  //         setIsLoggedIn(true);
-  //     }
-  // }, []);
-
   const login = async () => {
     setError();
     authApi.authenticate({ email, password }, (error, data) => {
@@ -37,6 +30,9 @@ function Login() {
         setSuccess("Login successful");
         setError(null);
         setIsLoggedIn(true);
+        setTimeout(() => {
+          navigate("/books");
+        }, 2000);
       }
     });
   };

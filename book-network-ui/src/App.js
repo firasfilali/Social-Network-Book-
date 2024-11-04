@@ -4,6 +4,7 @@ import Login from './components/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register';
 import ActivateAccount from './components/ActivateAccount';
+import Books from './book/components/Books';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/activate-account' element={<ActivateAccount />} />
+      <Route path='/books' element={<Books />} />
     </Routes>
     </BrowserRouter>
  
