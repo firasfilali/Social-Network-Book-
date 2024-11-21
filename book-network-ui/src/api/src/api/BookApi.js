@@ -17,6 +17,7 @@ import BookRequest from '../model/BookRequest';
 import BookResponse from '../model/BookResponse';
 import PageResponseBookResponse from '../model/PageResponseBookResponse';
 import PageResponseBorrowedBookResponse from '../model/PageResponseBorrowedBookResponse';
+import axiosInstance from "../../../interceptor/axiosInstance";
 
 /**
 * Book service.
@@ -153,7 +154,7 @@ export default class BookApi {
       let contentTypes = [];
       let accepts = ['application/json'];
       let returnType = PageResponseBookResponse;
-      return this.apiClient.callApi(
+      return axiosInstance.get(
         '/books', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null, callback

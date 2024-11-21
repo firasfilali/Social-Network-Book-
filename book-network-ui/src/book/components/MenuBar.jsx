@@ -1,5 +1,5 @@
 import { Disclosure, DisclosurePanel } from "@headlessui/react";
-import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { BellIcon, MagnifyingGlassIcon  } from "@heroicons/react/24/outline";
 import DesktopNavigation from "../NavBar/DeskTopNav";
 import MobileMenuButton from "../NavBar/MobileMenuBtn";
 import ProfileDropdown from "../NavBar/ProfileDropdown";
@@ -44,7 +44,7 @@ export default function MenuBar() {
                 className="py-2 px-4 rounded-l-full focus:outline-none"
               />
               <button className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-r-full">
-              <MagnifyingGlassIcon class="h-6 w-6 text-white-500" />
+              <MagnifyingGlassIcon className="h-6 w-6 text-white-500" />
               </button>
             </div>
             <button

@@ -1,21 +1,56 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { BookOpenIcon, HomeIcon, HeartIcon, BackwardIcon, ForwardIcon } from "@heroicons/react/24/outline";
-
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  BookOpenIcon,
+  HomeIcon,
+  HeartIcon,
+  BackwardIcon,
+  ForwardIcon,
+} from "@heroicons/react/24/outline";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const DesktopNavigation = ({ navigation }) => {
-  const [activeItem, setActiveItem] = useState("Home");
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState("");
+
+  useEffect(() => {
+    const savedItem = localStorage.getItem("activeMenuItem");
+    if (savedItem) {
+      setActiveItem(savedItem);
+    } else {
+      const currentItem = navigation.find(
+        (item) => item.href === location.pathname
+      );
+      if (currentItem) {
+        setActiveItem(currentItem.name);
+        localStorage.setItem("activeMenuItem", currentItem.name); // Save initial load item in localStorage
+      }
+    }
+  }, [location, navigation]);
+
+  const handleItemClick = (name) => {
+    setActiveItem(name);
+    localStorage.setItem("activeMenuItem", name);
+  };
+
   function getIconComponent(name) {
     const icons = {
       Home: <HomeIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />,
-      "My Books": <BookOpenIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />,
-      "Waiting list": <HeartIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />,
-      "Returned books": <BackwardIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />,
-      "Borrowed books": <ForwardIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />
+      "My Books": (
+        <BookOpenIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />
+      ),
+      "Waiting list": (
+        <HeartIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />
+      ),
+      "Returned books": (
+        <BackwardIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />
+      ),
+      "Borrowed books": (
+        <ForwardIcon aria-hidden="true" className="h-5 w-5 inline mr-2" />
+      ),
     };
     return icons[name] || null; // Return the icon component if it exists, otherwise null
   }
@@ -33,7 +68,7 @@ const DesktopNavigation = ({ navigation }) => {
                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
               "rounded-md px-3 py-2 text-sm font-medium"
             )}
-            onClick={() => setActiveItem(item.name)}
+            onClick={() => handleItemClick(item.name)}
           >
             {getIconComponent(item.name)}
             {item.name}
